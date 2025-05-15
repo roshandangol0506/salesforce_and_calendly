@@ -6,18 +6,37 @@ async function handleCreateEvent(req, res) {
     const tokenData = getTokenData();
 
     const eventData = {
-      Subject: req.body.subject,
-      StartDateTime: req.body.startDateTime,
-      EndDateTime: req.body.endDateTime,
+      Subject: req.body.subject, // ✅ Required
+      StartDateTime: req.body.startDateTime, // ✅ Required (if using EndDateTime) Eg: 2025-05-15T10:00:00Z
+      EndDateTime: req.body.endDateTime, // ✅ Required (if using StartDateTime) Eg: 2025-05-15T11:00:00Z
       Description: req.body.description,
       Location: req.body.location,
-      WhoId: req.body.whoId,
+      WhoId: req.body.whoId, // Link to Contact or Lead (if you use lead id then leave whatid) (if use contact if must include whatid as account id)
+      WhatId: req.body.whatId, // Link to Account, Opportunity, etc.
+      ActivityDateTime: req.body.activityDateTime, // Use if Start/EndDateTime not used
+      DurationInMinutes: req.body.durationInMinutes, // Optional (used if EndDateTime is not provided)
+      OwnerId: req.body.ownerId, // User who owns the event (userid)
+      ShowAs: req.body.showAs, // e.g., "Busy", "Free"
+      IsAllDayEvent: req.body.isAllDayEvent, // true/false
+      IsPrivate: req.body.isPrivate, // true/false
+      IsReminderSet: req.body.isReminderSet, // true/false
+      ReminderDateTime: req.body.reminderDateTime, // Timestamp
+      Priority: req.body.priority, // e.g., "High", "Normal", "Low"
+      RecurrenceStartDateTime: req.body.recurrenceStartDateTime,
+      RecurrenceEndDateOnly: req.body.recurrenceEndDateOnly,
+      RecurrenceTimeZoneSidKey: req.body.recurrenceTimeZoneSidKey,
+      RecurrenceType: req.body.recurrenceType, // "RecursDaily", "RecursWeekly", etc.
+      RecurrenceInterval: req.body.recurrenceInterval, // number (e.g., every 2 weeks)
     };
 
-    if (!eventData.StartDateTime || !eventData.EndDateTime) {
+    if (
+      !eventData.Subject ||
+      !eventData.StartDateTime ||
+      !eventData.EndDateTime
+    ) {
       return res
         .status(400)
-        .json({ error: "Start and end times are required" });
+        .json({ error: "Subject, Start and end Date are required" });
     }
 
     const response = await axios.post(
@@ -66,11 +85,26 @@ async function handleUpdateEvent(req, res) {
 
     const updateData = {
       Subject: req.body.subject,
-      StartDateTime: req.body.startDateTime,
-      EndDateTime: req.body.endDateTime,
+      StartDateTime: req.body.startDateTime, //  Eg: 2025-05-15T10:00:00Z
+      EndDateTime: req.body.endDateTime, // Eg: 2025-05-15T11:00:00Z
       Description: req.body.description,
       Location: req.body.location,
-      WhoId: req.body.whoId,
+      WhoId: req.body.whoId, // Link to Contact or Lead (if you use lead id then leave whatid) (if use contact if must include whatid as account id)
+      WhatId: req.body.whatId, // Link to Account, Opportunity, etc.
+      ActivityDateTime: req.body.activityDateTime, // Use if Start/EndDateTime not used
+      DurationInMinutes: req.body.durationInMinutes, // Optional (used if EndDateTime is not provided)
+      OwnerId: req.body.ownerId, // User who owns the event (userid)
+      ShowAs: req.body.showAs, // e.g., "Busy", "Free"
+      IsAllDayEvent: req.body.isAllDayEvent, // true/false
+      IsPrivate: req.body.isPrivate, // true/false
+      IsReminderSet: req.body.isReminderSet, // true/false
+      ReminderDateTime: req.body.reminderDateTime, // Timestamp
+      Priority: req.body.priority, // e.g., "High", "Normal", "Low"
+      RecurrenceStartDateTime: req.body.recurrenceStartDateTime,
+      RecurrenceEndDateOnly: req.body.recurrenceEndDateOnly,
+      RecurrenceTimeZoneSidKey: req.body.recurrenceTimeZoneSidKey,
+      RecurrenceType: req.body.recurrenceType, // "RecursDaily", "RecursWeekly", etc.
+      RecurrenceInterval: req.body.recurrenceInterval, // number (e.g., every 2 weeks)
     };
 
     await axios.patch(

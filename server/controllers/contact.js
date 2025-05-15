@@ -3,15 +3,43 @@ const { getTokenData } = require("../salesforce");
 
 async function handleCreateContact(req, res) {
   try {
+    // token generate by salesforce
     const tokenData = getTokenData();
 
     const contactData = {
-      LastName: req.body.lastName,
       FirstName: req.body.firstName,
+      LastName: req.body.lastName,
       Email: req.body.email,
       Phone: req.body.phone,
-      AccountId: req.body.accountId,
+      MobilePhone: req.body.mobilePhone,
+      Fax: req.body.fax,
+      Title: req.body.title,
+      Department: req.body.department,
+      MailingStreet: req.body.mailingStreet,
+      MailingCity: req.body.mailingCity,
+      MailingState: req.body.mailingState,
+      MailingPostalCode: req.body.mailingPostalCode,
+      MailingCountry: req.body.mailingCountry,
+      OtherStreet: req.body.otherStreet,
+      OtherCity: req.body.otherCity,
+      OtherState: req.body.otherState,
+      OtherPostalCode: req.body.otherPostalCode,
+      OtherCountry: req.body.otherCountry,
+      Description: req.body.description,
+      LeadSource: req.body.leadSource,
+      AccountId: req.body.accountId, // This links the contact to an account (id of account created in account section)
+      Birthdate: req.body.birthdate, // Format: "YYYY-MM-DD" (1990-06-15)
+      AssistantName: req.body.assistantName,
+      AssistantPhone: req.body.assistantPhone,
+      Salutation: req.body.salutation, // e.g., "Mr.", "Ms."
     };
+
+    if (!contactData.LastName || !contactData.AccountId || !contactData.Phone) {
+      console.log("Last Name, Account Id and Phone Number are required");
+      res.status(404).json({
+        error: "Last Name, Account Id and Phone Number are required",
+      });
+    }
 
     const response = await axios.post(
       `${tokenData.instance_url}/services/data/v58.0/sobjects/Contact`,
@@ -34,6 +62,8 @@ async function handleCreateContact(req, res) {
 async function handleGetContact(req, res) {
   try {
     const { id } = req.params;
+
+    // token generate by salesforce
     const tokenData = getTokenData();
 
     const response = await axios.get(
@@ -55,14 +85,36 @@ async function handleGetContact(req, res) {
 async function handleUpdateContact(req, res) {
   try {
     const { id } = req.params;
+
+    // token generate by salesforce
     const tokenData = getTokenData();
 
     const updateData = {
-      LastName: req.body.lastName,
       FirstName: req.body.firstName,
+      LastName: req.body.lastName,
       Email: req.body.email,
       Phone: req.body.phone,
-      AccountId: req.body.accountId,
+      MobilePhone: req.body.mobilePhone,
+      Fax: req.body.fax,
+      Title: req.body.title,
+      Department: req.body.department,
+      MailingStreet: req.body.mailingStreet,
+      MailingCity: req.body.mailingCity,
+      MailingState: req.body.mailingState,
+      MailingPostalCode: req.body.mailingPostalCode,
+      MailingCountry: req.body.mailingCountry,
+      OtherStreet: req.body.otherStreet,
+      OtherCity: req.body.otherCity,
+      OtherState: req.body.otherState,
+      OtherPostalCode: req.body.otherPostalCode,
+      OtherCountry: req.body.otherCountry,
+      Description: req.body.description,
+      LeadSource: req.body.leadSource,
+      AccountId: req.body.accountId, // This links the contact to an account (id of account created in account section)
+      Birthdate: req.body.birthdate, // Format: "YYYY-MM-DD" (1990-06-15)
+      AssistantName: req.body.assistantName,
+      AssistantPhone: req.body.assistantPhone,
+      Salutation: req.body.salutation, // e.g., "Mr.", "Ms."
     };
 
     const response = await axios.patch(
@@ -86,6 +138,8 @@ async function handleUpdateContact(req, res) {
 async function handleDeleteContact(req, res) {
   try {
     const { id } = req.params;
+
+    // token generate by salesforce
     const tokenData = getTokenData();
 
     await axios.delete(

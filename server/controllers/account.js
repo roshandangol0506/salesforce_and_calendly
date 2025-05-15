@@ -6,24 +6,29 @@ async function handleCreateAccount(req, res) {
     const tokenData = getTokenData();
 
     const accountData = {
-      Name: req.body.name,
+      Name: req.body.name, // ✅ Required
       Phone: req.body.phone,
       Website: req.body.website,
       Industry: req.body.industry,
       Type: req.body.type,
+      BillingStreet: req.body.billingStreet,
       BillingCity: req.body.billingCity,
       BillingState: req.body.billingState,
+      BillingPostalCode: req.body.billingPostalCode,
+      BillingCountry: req.body.billingCountry,
+      ShippingStreet: req.body.shippingStreet,
+      ShippingCity: req.body.shippingCity,
+      ShippingState: req.body.shippingState,
+      ShippingPostalCode: req.body.shippingPostalCode,
+      ShippingCountry: req.body.shippingCountry,
+      NumberOfEmployees: req.body.numberOfEmployees,
+      AnnualRevenue: req.body.annualRevenue,
+      Description: req.body.description,
+      Fax: req.body.fax,
     };
 
-    if (
-      !accountData.Name ||
-      !accountData.Phone ||
-      !accountData.Website ||
-      !accountData.Industry ||
-      !accountData.BillingCity ||
-      !accountData.BillingState
-    ) {
-      res.status(404).jso({ error: "All fields are required" });
+    if (!accountData.Name) {
+      res.status(404).jso({ error: "Account Name is required" });
     }
 
     const response = await axios.post(
@@ -75,8 +80,20 @@ async function handleUpdateAccount(req, res) {
       Website: req.body.website,
       Industry: req.body.industry,
       Type: req.body.type,
+      BillingStreet: req.body.billingStreet,
       BillingCity: req.body.billingCity,
       BillingState: req.body.billingState,
+      BillingPostalCode: req.body.billingPostalCode,
+      BillingCountry: req.body.billingCountry,
+      ShippingStreet: req.body.shippingStreet,
+      ShippingCity: req.body.shippingCity,
+      ShippingState: req.body.shippingState,
+      ShippingPostalCode: req.body.shippingPostalCode,
+      ShippingCountry: req.body.shippingCountry,
+      NumberOfEmployees: req.body.numberOfEmployees,
+      AnnualRevenue: req.body.annualRevenue,
+      Description: req.body.description,
+      Fax: req.body.fax,
     };
 
     const response = await axios.patch(
