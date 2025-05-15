@@ -23,10 +23,10 @@ async function handleCreateLead(req, res) {
 
     // data of lead (firstname, lastname, company and email are required)
     const leadData = {
-      FirstName: req.body.firstName,
-      LastName: req.body.lastName,
-      Company: req.body.company,
-      Email: req.body.email,
+      FirstName: req.body.firstName, //Required
+      LastName: req.body.lastName, //Required
+      Company: req.body.company, //Required
+      Email: req.body.email, //Required
       Phone: req.body.phone,
       Title: req.body.title,
       Website: req.body.website,
@@ -50,11 +50,9 @@ async function handleCreateLead(req, res) {
       !leadData.Email
     ) {
       console.log("First Name, Last Name, Company and Email are required");
-      res
-        .status(404)
-        .json({
-          error: "First Name, Last Name, Company and Email are required",
-        });
+      res.status(404).json({
+        error: "First Name, Last Name, Company and Email are required",
+      });
     }
 
     // Check if lead(email) already exists

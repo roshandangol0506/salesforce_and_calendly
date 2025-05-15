@@ -8,9 +8,9 @@ async function handleCreateContact(req, res) {
 
     const contactData = {
       FirstName: req.body.firstName,
-      LastName: req.body.lastName,
+      LastName: req.body.lastName, //Required
       Email: req.body.email,
-      Phone: req.body.phone,
+      Phone: req.body.phone, //Required
       MobilePhone: req.body.mobilePhone,
       Fax: req.body.fax,
       Title: req.body.title,
