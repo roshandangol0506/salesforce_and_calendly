@@ -8,9 +8,9 @@ const {
 
 const router = express.Router();
 
-router.post("/createlead", handleCreateLead);
-router.get("/lead/:id", handleGetLead);
-router.put("/lead/:id", handleUpdateLead);
-router.delete("/lead/:id", handleDeleteLead);
+router.post("/", handleCreateLead);
+router.get("/:id", handleGetLead);
+router.put("/:id", handleUpdateLead);
+router.delete("/:id", handleDeleteLead);
 
 module.exports = router;

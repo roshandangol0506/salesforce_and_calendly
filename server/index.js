@@ -15,6 +15,16 @@ const contact = require("./routes/contact");
 const account = require("./routes/account");
 const event = require("./routes/event");
 
+const freshSalesLead = require("./routes/freshsales");
+
+const hubSpot = require("./routes/hubSpot");
+
+const pipeDrive = require("./routes/pipedrive");
+
+const epsoCrm = require("./routes/epsoCRM");
+
+const zoho = require("./routes/zoho");
+
 connectTomongoDB(process.env.mongodb_connection)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
@@ -41,10 +51,15 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", lead);
-app.use("/", contact);
-app.use("/", account);
-app.use("/", event);
+app.use("/lead", lead);
+app.use("/contact", contact);
+app.use("/account", account);
+app.use("/event", event);
+app.use("/freshsales", freshSalesLead);
+app.use("/hubspot", hubSpot);
+app.use("/pipedrive", pipeDrive);
+app.use("/epsocrm", epsoCrm);
+app.use("/", zoho);
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () =>

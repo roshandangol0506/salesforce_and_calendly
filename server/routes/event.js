@@ -8,9 +8,9 @@ const {
 
 const router = express.Router();
 
-router.post("/event", handleCreateEvent);
-router.get("/event/:id", handlegetEvent);
-router.patch("/event/:id", handleUpdateEvent);
-router.delete("/event/:id", handleDeleteEvent);
+router.post("/", handleCreateEvent);
+router.get("/:id", handlegetEvent);
+router.patch("/:id", handleUpdateEvent);
+router.delete("/:id", handleDeleteEvent);
 
 module.exports = router;

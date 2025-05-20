@@ -8,9 +8,9 @@ const {
 
 const router = express.Router();
 
-router.post("/contact", handleCreateContact);
-router.get("/contact/:id", handleGetContact);
-router.put("/contact/:id", handleUpdateContact);
-router.delete("/contact/:id", handleDeleteContact);
+router.post("/", handleCreateContact);
+router.get("/:id", handleGetContact);
+router.put("/:id", handleUpdateContact);
+router.delete("/:id", handleDeleteContact);
 
 module.exports = router;

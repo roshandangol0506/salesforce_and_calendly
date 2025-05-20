@@ -8,9 +8,9 @@ const {
 
 const router = express.Router();
 
-router.post("/account", handleCreateAccount);
-router.get("/account/:id", handleGetAccount);
-router.patch("/account/:id", handleUpdateAccount);
-router.delete("/account/:id", handleDeleteAccount);
+router.post("/", handleCreateAccount);
+router.get("/:id", handleGetAccount);
+router.patch("/:id", handleUpdateAccount);
+router.delete("/:id", handleDeleteAccount);
 
 module.exports = router;
