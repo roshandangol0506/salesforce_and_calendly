@@ -3,9 +3,7 @@
 
 # dependencies
 /node_modules
-controllers
-/controllers/*.js
-
+/cotrollers
 
 # testing
 /coverage
