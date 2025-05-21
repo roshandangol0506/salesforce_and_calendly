@@ -24,3 +24,10 @@ yarn-error.log*
 .env
 env
 /.env
+
+controllers/zoho.js
+controllers/epsoCRM.js
+controllers/freshsales.js
+controllers/hotSpot.js
+controllers/pipedrive.js
+controllers/salesforce.js
