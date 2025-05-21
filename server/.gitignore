@@ -4,7 +4,7 @@
 # dependencies
 /node_modules
 controllers
-/controllers
+/controllers/*.js
 
 
 # testing
@@ -27,12 +27,6 @@ yarn-error.log*
 env
 /.env
 
-controllers/zoho.js
-controllers/epsoCRM.js
-controllers/freshsales.js
-controllers/hotSpot.js
-controllers/pipedrive.js
-controllers/salesforce.js
 
 zoho.js
 salesforce.js
