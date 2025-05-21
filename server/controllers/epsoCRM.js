@@ -1,7 +1,7 @@
 const axios = require("axios");
+require("dotenv").config();
 
 const apiUrl = "https://roshan-dangol.espocloud.com/api/v1";
-const apiKey = "e75bb0c9f3006a3962bf7a34905daeed";
 
 async function handleEpsoCrmContact(req, res) {
   try {
@@ -15,7 +15,7 @@ async function handleEpsoCrmContact(req, res) {
     const response = await axios.post(`${apiUrl}/Contact`, contactData, {
       headers: {
         "Content-Type": "application/json",
-        "X-Api-Key": apiKey,
+        "X-Api-Key": process.env.EPSOCRM_API_KEY,
       },
     });
 
@@ -45,7 +45,7 @@ async function handleEspoCrmAccount(req, res) {
     const response = await axios.post(`${apiUrl}/Account`, accountData, {
       headers: {
         "Content-Type": "application/json",
-        "X-Api-Key": apiKey,
+        "X-Api-Key": process.env.EPSOCRM_API_KEY,
       },
     });
 

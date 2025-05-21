@@ -42,6 +42,7 @@ const Page = () => {
       const response = await axios.post(
         "http://localhost:8000/salesforce/lead",
         {
+          // passing single fields from object and again making object in backend (pass direct an object and receive just object in backend)
           firstName: formData.firstName,
           lastName: formData.lastName,
           company: formData.company,

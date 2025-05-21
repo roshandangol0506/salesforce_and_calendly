@@ -1,6 +1,7 @@
 const axios = require("axios");
 const qs = require("qs");
 const { getAccessToken } = require("../zoho");
+require("dotenv").config();
 
 // this below is url that must paste in browser in order to get refresh token for only one time
 // https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.IZZTSW4YLRMURR59UY3N6PSJ84TWAY&redirect_uri=http://localhost:8000/oauth/callback&scope=ZohoCRM.modules.ALL&access_type=offline&prompt=consent
@@ -18,8 +19,8 @@ const { getAccessToken } = require("../zoho");
 //   try {
 //     const data = qs.stringify({
 //       code,
-//       client_id: "1000.IZZTSW4YLRMURR59UY3N6PSJ84TWAY",
-//       client_secret: "d5416f2f2876da9562b3a1d90361fc1abc5b8e0b98",
+//       client_id: process.env.ZOHO_CLIENT_ID,
+//       client_secret: process.env.ZOHO_CLIENT_SECRET,
 //       redirect_uri: "http://localhost:8000/oauth/callback",
 //       grant_type: "authorization_code",
 //     });
