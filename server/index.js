@@ -10,10 +10,7 @@ const { connectToSalesforce } = require("./salesforce");
 const app = express();
 const server = http.createServer(app);
 
-const lead = require("./routes/lead");
-const contact = require("./routes/contact");
-const account = require("./routes/account");
-const event = require("./routes/event");
+const salesforce = require("./routes/salesforce");
 
 const freshSalesLead = require("./routes/freshsales");
 
@@ -51,15 +48,12 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/lead", lead);
-app.use("/contact", contact);
-app.use("/account", account);
-app.use("/event", event);
+app.use("/salesforce", salesforce);
 app.use("/freshsales", freshSalesLead);
 app.use("/hubspot", hubSpot);
 app.use("/pipedrive", pipeDrive);
 app.use("/epsocrm", epsoCrm);
-app.use("/", zoho);
+app.use("/zoho", zoho);
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () =>

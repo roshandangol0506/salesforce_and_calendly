@@ -53,24 +53,22 @@ const { getAccessToken } = require("../zoho");
 
 async function createZohoLead(req, res) {
   try {
-    const { firstName, lastName, company, email, phone } = req.body;
+    const leadData = {
+      First_Name: req.body.firstName || "",
+      Last_Name: req.body.lastName,
+      Company: req.body.company,
+      Email: req.body.email || "",
+      Phone: req.body.phone || "",
+    };
 
     // Validate required fields
-    if (!lastName || !company) {
+    if (!leadData.Last_Name || !leadData.First_Name) {
       return res.status(400).json({
         error: "Last Name and Company are required fields in Zoho CRM.",
       });
     }
 
-    const leadData = {
-      First_Name: firstName || "",
-      Last_Name: lastName,
-      Company: company,
-      Email: email || "",
-      Phone: phone || "",
-    };
-
-    const token = await getAccessToken(); // assumes this gets valid token
+    const token = await getAccessToken();
 
     const response = await axios.post(
       "https://www.zohoapis.com/crm/v2/Leads",
@@ -86,8 +84,11 @@ async function createZohoLead(req, res) {
       }
     );
 
-    console.log("Lead created:", response.data);
-    return res.json(response.data);
+    res.status(200).json({
+      success: true,
+      message: "Successfully created Lead",
+      data: response.data,
+    });
   } catch (error) {
     console.error(
       "Error creating Zoho Lead:",
@@ -97,23 +98,112 @@ async function createZohoLead(req, res) {
   }
 }
 
+async function handleGetZohoLead(req, res) {
+  try {
+    const { id } = req.params;
+
+    const token = await getAccessToken();
+
+    const response = await axios.get(
+      `https://www.zohoapis.com/crm/v2/Leads/${id}`,
+      {
+        headers: {
+          Authorization: `Zoho-oauthtoken ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Lead Fetched Successfully",
+      data: response.data,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to Fetch Lead" });
+  }
+}
+
+async function handleUpdateZohoLead(req, res) {
+  try {
+    const { id } = req.params;
+
+    const updatedData = {
+      First_Name: req.body.firstName || "",
+      Last_Name: req.body.lastName,
+      Company: req.body.company,
+      Email: req.body.email || "",
+      Phone: req.body.phone || "",
+    };
+
+    const token = await getAccessToken();
+
+    const response = await axios.patch(
+      `https://www.zohoapis.com/crm/v2/Leads/${id}`,
+      {
+        data: [updatedData],
+        trigger: ["approval", "workflow", "blueprint"],
+      },
+      {
+        headers: {
+          Authorization: `Zoho-oauthtoken ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Lead Updated Successfully",
+      data: response.data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to Update Lead",
+      error: err.response?.data || err.message,
+    });
+  }
+}
+
+async function handleDeleteZohoLead(req, res) {
+  try {
+    const { id } = req.params;
+
+    const token = await getAccessToken();
+
+    await axios.delete(`https://www.zohoapis.com/crm/v2/Leads/${id}`, {
+      headers: {
+        Authorization: `Zoho-oauthtoken ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Lead Deleted Successfully" });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to delete Lead",
+      error: err.response?.data || err.message,
+    });
+  }
+}
+
 async function createZohoAccount(req, res) {
   try {
-    const { accountName, phone, website, description } = req.body;
+    const accountData = {
+      Account_Name: req.body.accountName,
+      Phone: req.body.phone || "",
+      Website: req.body.website || "",
+      Description: req.body.description || "",
+    };
 
     // Validate required field
-    if (!accountName) {
+    if (!accountData.Account_Name) {
       return res.status(400).json({
         error: "Account Name is required.",
       });
     }
-
-    const accountData = {
-      Account_Name: accountName,
-      Phone: phone || "",
-      Website: website || "",
-      Description: description || "",
-    };
 
     const token = await getAccessToken();
 
@@ -131,8 +221,11 @@ async function createZohoAccount(req, res) {
       }
     );
 
-    console.log("Account created:", response.data);
-    return res.json(response.data);
+    res.status(200).json({
+      success: true,
+      message: "Account created Successfully",
+      data: response.data,
+    });
   } catch (error) {
     console.error(
       "Error creating Zoho Account:",
@@ -142,4 +235,103 @@ async function createZohoAccount(req, res) {
   }
 }
 
-module.exports = { createZohoLead, createZohoAccount };
+async function handleGetZohoAccount(req, res) {
+  try {
+    const { id } = req.params;
+
+    const token = await getAccessToken();
+
+    const response = await axios.get(
+      `https://www.zohoapis.com/crm/v2/Accounts/${id}`,
+      {
+        headers: {
+          Authorization: `Zoho-oauthtoken ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Account Fetched Successfully",
+      data: response.data,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to Fetch Account" });
+  }
+}
+
+async function handleUpdateZohoAccount(req, res) {
+  try {
+    const { id } = req.params;
+
+    const updatedData = {
+      Account_Name: req.body.accountName,
+      Phone: req.body.phone || "",
+      Website: req.body.website || "",
+      Description: req.body.description || "",
+    };
+
+    const token = await getAccessToken();
+
+    const response = await axios.patch(
+      `https://www.zohoapis.com/crm/v2/Accounts/${id}`,
+      {
+        data: [updatedData],
+        trigger: ["approval", "workflow", "blueprint"],
+      },
+      {
+        headers: {
+          Authorization: `Zoho-oauthtoken ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Account Updated Successfully",
+      data: response.data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to Update Account",
+      error: err.response?.data || err.message,
+    });
+  }
+}
+
+async function handleDeleteZohoAccount(req, res) {
+  try {
+    const { id } = req.params;
+
+    const token = await getAccessToken();
+
+    await axios.delete(`https://www.zohoapis.com/crm/v2/Accounts/${id}`, {
+      headers: {
+        Authorization: `Zoho-oauthtoken ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Account Deleted Successfully" });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to delete Account",
+      error: err.response?.data || err.message,
+    });
+  }
+}
+
+module.exports = {
+  createZohoLead,
+  createZohoAccount,
+  handleGetZohoLead,
+  handleUpdateZohoLead,
+  handleDeleteZohoLead,
+  handleGetZohoAccount,
+  handleUpdateZohoAccount,
+  handleDeleteZohoAccount,
+};
