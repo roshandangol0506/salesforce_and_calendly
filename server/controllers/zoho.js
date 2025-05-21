@@ -4,7 +4,7 @@ const { getAccessToken } = require("../zoho");
 require("dotenv").config();
 
 // this below is url that must paste in browser in order to get refresh token for only one time
-// https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.IZZTSW4YLRMURR59UY3N6PSJ84TWAY&redirect_uri=http://localhost:8000/oauth/callback&scope=ZohoCRM.modules.ALL&access_type=offline&prompt=consent
+//
 
 // This below is redirect url function which is added in zoho api console as localhost:8000/oauth/callback
 // async function getZohoAccessToken(req, res) {

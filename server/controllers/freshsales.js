@@ -2,11 +2,9 @@
 const axios = require("axios");
 require("dotenv").config();
 
-const FRESHSALES_DOMAIN = "iimscollege-team.myfreshworks.com/crm/sales";
-
 // Create a persistent Axios instance
 const freshsalesAPI = axios.create({
-  baseURL: `https://${FRESHSALES_DOMAIN}/api`,
+  baseURL: `https://${process.env.FRESHSALES_DOMAIN}/api`,
   headers: {
     Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
     "Content-Type": "application/json",

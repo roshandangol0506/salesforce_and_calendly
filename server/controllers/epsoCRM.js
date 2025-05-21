@@ -12,12 +12,16 @@ async function handleEpsoCrmContact(req, res) {
       phoneNumber: req.body.phoneNumber,
     };
 
-    const response = await axios.post(`${apiUrl}/Contact`, contactData, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Api-Key": process.env.EPSOCRM_API_KEY,
-      },
-    });
+    const response = await axios.post(
+      `${process.env.EPSOCRM_API_URL}/Contact`,
+      contactData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Api-Key": process.env.EPSOCRM_API_KEY,
+        },
+      }
+    );
 
     console.log("Contact created:", response.data);
     res.status(200).json({ message: "Contact created", data: response.data });
@@ -42,12 +46,16 @@ async function handleEspoCrmAccount(req, res) {
       billingAddressCountry: req.body.billingAddressCountry,
     };
 
-    const response = await axios.post(`${apiUrl}/Account`, accountData, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Api-Key": process.env.EPSOCRM_API_KEY,
-      },
-    });
+    const response = await axios.post(
+      `${process.env.EPSOCRM_API_URL}/Account`,
+      accountData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Api-Key": process.env.EPSOCRM_API_KEY,
+        },
+      }
+    );
 
     res.json({ message: "Account created", data: response.data });
   } catch (error) {
