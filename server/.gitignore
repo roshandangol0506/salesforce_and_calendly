@@ -32,4 +32,5 @@ controllers/hotSpot.js
 controllers/pipedrive.js
 controllers/salesforce.js
 
-zoho
+zoho.js
+salesforce.js
