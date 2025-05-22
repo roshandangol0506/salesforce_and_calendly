@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   handleCreateLead,
-  handleGetLead,
+  handleGetAllLead,
   handleUpdateLead,
   handleDeleteLead,
   handleCreateContact,
@@ -16,12 +16,14 @@ const {
   handleGetAccount,
   handleUpdateAccount,
   handleDeleteAccount,
+  handleGetSpecificLead,
 } = require("../controllers/salesforce");
 
 const router = express.Router();
 
 router.post("/lead/", handleCreateLead);
-router.get("/lead/:id", handleGetLead);
+router.get("/lead", handleGetAllLead);
+router.get("/lead/:id", handleGetSpecificLead);
 router.put("/lead/:id", handleUpdateLead);
 router.delete("/lead/:id", handleDeleteLead);
 

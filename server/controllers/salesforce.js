@@ -83,7 +83,7 @@ async function handleCreateLead(req, res) {
   }
 }
 
-async function handleGetLead(req, res) {
+async function handleGetSpecificLead(req, res) {
   try {
     const { id } = req.params;
 
@@ -106,6 +106,27 @@ async function handleGetLead(req, res) {
   }
 }
 
+async function handleGetAllLead(req, res) {
+  try {
+    // token generate by salesforce
+    const tokenData = getTokenData();
+
+    const response = await axios.get(
+      `${tokenData.instance_url}/services/data/v58.0/sobjects/Lead`,
+      {
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+        },
+      }
+    );
+
+    res.json({ success: true, lead: response.data });
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to fetch lead" });
+  }
+}
+
 async function handleUpdateLead(req, res) {
   try {
     const { id } = req.params;
@@ -114,25 +135,7 @@ async function handleUpdateLead(req, res) {
     const tokenData = getTokenData();
 
     // update only required field, doesnot need to insert all field data to update
-    const updateData = {
-      FirstName: req.body.firstName,
-      LastName: req.body.lastName,
-      Company: req.body.company,
-      Email: req.body.email,
-      Phone: req.body.phone,
-      Title: req.body.title,
-      Website: req.body.website,
-      LeadSource: req.body.leadSource,
-      Status: req.body.status,
-      Industry: req.body.industry,
-      Rating: req.body.rating,
-      Street: req.body.street,
-      City: req.body.city,
-      State: req.body.state,
-      PostalCode: req.body.postalCode,
-      Country: req.body.country,
-      Description: req.body.description,
-    };
+    const updateData = req.body;
 
     await axios.patch(
       `${tokenData.instance_url}/services/data/v58.0/sobjects/Lead/${id}`,
@@ -613,7 +616,8 @@ async function handleDeleteEvent(req, res) {
 
 module.exports = {
   handleCreateLead,
-  handleGetLead,
+  handleGetAllLead,
+  handleGetSpecificLead,
   handleUpdateLead,
   handleDeleteLead,
   handleCreateAccount,
