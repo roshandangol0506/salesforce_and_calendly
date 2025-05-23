@@ -1,7 +1,90 @@
 const sgMail = require("@sendgrid/mail");
 const axios = require("axios");
+const scopes = require("../../sendGrid/scopes");
 require("dotenv").config();
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const masterApiKey = process.env.SENDGRID_API_KEY;
+sgMail.setApiKey(masterApiKey);
+
+async function GenerateNewApiKey(req, res) {
+  try {
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+    // Create new API key
+    const createRes = await axios.post(
+      "https://api.sendgrid.com/v3/api_keys",
+      {
+        name,
+        scopes: scopes, //full access
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${masterApiKey}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully created new api",
+      data: createRes.data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to rotate key:",
+      error: err.response?.data || err.message,
+    });
+  }
+}
+
+async function getAllApiKeys(req, res) {
+  try {
+    // Get all name and ids of api
+    const response = await axios.get("https://api.sendgrid.com/v3/api_keys", {
+      headers: {
+        Authorization: `Bearer ${masterApiKey}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      keys: response.data.result, // provides name and id
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Failed to fetch API keys",
+      error: err.response?.data || err.message,
+    });
+  }
+}
+
+async function deleteOldApiKey(req, res) {
+  try {
+    const { id } = req.params; // id of api
+    if (!id) {
+      return res.status(400).json({ error: "Id of Api Key is required" });
+    }
+    await axios.delete(`https://api.sendgrid.com/v3/api_keys/${id}`, {
+      headers: {
+        Authorization: `Bearer ${masterApiKey}`,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      message: "Successfully Deleted api",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to Delete Api",
+      error: err.response?.data || err.message,
+    });
+  }
+}
 
 async function handleSendGrid(req, res) {
   const { to, subject, text, html } = req.body;
@@ -261,15 +344,29 @@ async function createTemplate(req, res) {
 
 async function addVersionToTemplate(req, res) {
   try {
+    const {
+      templateId,
+      name,
+      html_content,
+      plain_content,
+      subject,
+      editor,
+      active,
+      sender_id,
+      suppression_group_id,
+    } = req.body;
+
     const payload = {
-      active: req.body.active,
-      name: req.body.name,
-      html_content: req.body.html_content,
-      plain_content: req.body.plain_content,
-      subject: req.body.subject,
-      editor: req.body.editor,
+      name,
+      html_content,
+      plain_content,
+      subject,
+      editor, // "code" or "design"
+      active, // 1 = live, 0 = draft
+      generate_plain_content: true, // optional but good
+      sender_id, // required if active = 1
+      suppression_group_id, // required if active = 1
     };
-    const templateId = req.body.templateId;
 
     const response = await axios.post(
       `https://api.sendgrid.com/v3/templates/${templateId}/versions`,
@@ -284,12 +381,12 @@ async function addVersionToTemplate(req, res) {
 
     res.status(200).json({
       success: true,
-      message: "Successfully create version in template",
+      message: "Successfully created and activated template version",
       data: response.data,
     });
   } catch (err) {
     res.status(500).json({
-      message: "Failed to create version in template",
+      message: "Failed to create template version",
       error: err.response?.data || err.message,
     });
   }
@@ -329,6 +426,9 @@ module.exports = {
   createTemplate,
   addVersionToTemplate,
   sendWithDynamicTemplate,
+  GenerateNewApiKey,
+  deleteOldApiKey,
+  getAllApiKeys,
 };
 
 // Send including attachemnts done
