@@ -22,6 +22,8 @@ const epsoCrm = require("./routes/epsoCRM");
 
 const zoho = require("./routes/zoho");
 
+const sendGrid = require("./routes/sendGrid");
+
 connectTomongoDB(process.env.mongodb_connection)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
@@ -54,6 +56,7 @@ app.use("/hubspot", hubSpot);
 app.use("/pipedrive", pipeDrive);
 app.use("/epsocrm", epsoCrm);
 app.use("/zoho", zoho);
+app.use("/sendgrid", sendGrid);
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () =>
